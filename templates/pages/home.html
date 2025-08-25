@@ -1,0 +1,384 @@
+{% extends "base.html" %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="bootLab - Tu tienda de hardware y componentes de PC. Productos nuevos, outlet y servicio de reacondicionamiento.">
+    <title>bootLab - Tienda de Hardware</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <script defer src="{% static 'js/app.js' %}"></script>
+
+</head>
+<body>
+
+    <!-- Para Django, este sería el base.html -->
+    {% block header %}
+    <header class="header-container">
+        <nav id="navPrimary" class="nav-primary">
+            <div class="nav-content">
+                <a href="#" class="logo">boot<span>Lab</span></a>
+                <form id="searchForm" class="search-form">
+                    <input type="search" id="searchQuery" placeholder="Buscar productos..." aria-label="Buscar productos">
+                    <button type="submit" aria-label="Buscar">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    </button>
+                </form>
+                <div class="nav-actions">
+                    <button id="btnCart" class="btn btn-icon">
+                        <span class="icon">🛒</span> (<span id="cartCount">0</span>)
+                    </button>
+                    <div class="dropdown-container">
+                        <button id="btnLogin" class="btn btn-icon btn-login">
+                            <span class="icon">👤</span> Ingresar
+                        </button>
+                        <div id="loginDropdown" class="dropdown-menu hidden">
+                            <a href="#"><span>⚙️</span> Mi cuenta</a>
+                            <a href="#"><span>🚪</span> Logout</a>
+                        </div>
+                    </div>
+                </div>
+                <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Abrir menú" aria-expanded="false">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                </button>
+            </div>
+        </nav>
+        <nav id="navSecondary" class="nav-secondary">
+            <div class="nav-links">
+                <a href="#acerca">Acerca de nosotros</a>
+                <a href="#productos">Productos</a>
+                <a href="#reacondiciona">Reacondicioná tu PC</a>
+                <a href="#outlet">OUTLET</a>
+                <a href="#contacto">Contacto</a>
+            </div>
+        </nav>
+    </header>
+    {% endblock header %}
+
+    {% block content %}
+    <main>
+        <section id="carousel" class="carousel" aria-roledescription="carousel" aria-label="Servicios destacados">
+            <div class="carousel-inner">
+                <!-- Slide 1 -->
+                <div class="carousel-item active">
+                    <img  alt="Técnico trabajando en una computadora" src="https://images.unsplash.com/photo-1611323209413-689ad3c2e8f0" />
+                    <div class="carousel-caption">
+                        <h2>Potenciá tu Máquina</h2>
+                        <p>Servicio experto para llevar tu PC al siguiente nivel.</p>
+                        <a href="#reacondiciona" class="btn btn-primary">Empezar</a>
+                    </div>
+                </div>
+                <!-- Slide 2 -->
+                <div class="carousel-item">
+                    <img  alt="Componentes de PC sobre una mesa" src="https://images.unsplash.com/photo-1666430135725-909fcb56501b" />
+                    <div class="carousel-caption">
+                        <h2>Diagnóstico Gratuito</h2>
+                        <p>Analizamos tu equipo y te damos la mejor solución.</p>
+                        <a href="#reacondiciona" class="btn btn-primary">Empezar</a>
+                    </div>
+                </div>
+                <!-- Slide 3 -->
+                <div class="carousel-item">
+                    <img  alt="PC funcionando con luces RGB" src="https://images.unsplash.com/photo-1689170912270-2170c18d5597" />
+                    <div class="carousel-caption">
+                        <h2>Rendimiento Garantizado</h2>
+                        <p>Disfrutá de una PC más rápida y eficiente que nunca.</p>
+                        <a href="#reacondiciona" class="btn btn-primary">Empezar</a>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control prev" aria-label="Anterior">&#10094;</button>
+            <button class="carousel-control next" aria-label="Siguiente">&#10095;</button>
+            <div class="carousel-indicators"></div>
+        </section>
+
+        <section id="productos" class="container">
+            <h2 id="destacados">Productos Destacados</h2>
+            <div id="gridDestacados" class="product-grid">
+                <!-- Las cards de productos se generarían con un loop en Django -->
+                <!-- {% for product in featured_products %} -->
+                <!-- {% include 'partials/product_card.html' with product=product %} -->
+                <!-- {% endfor %} -->
+                <div class="card" data-name="Tarjeta Gráfica RTX 4080">
+                    <img  alt="Tarjeta Gráfica" src="https://images.unsplash.com/photo-1674741659137-b82a0b687ded" />
+                    <h3>Tarjeta Gráfica RTX 4080</h3>
+                    <p class="price">$1200.00</p>
+                    <ul>
+                        <li>16GB GDDR6X</li>
+                        <li>DLSS 3</li>
+                        <li>Ray Tracing</li>
+                    </ul>
+                    <div class="card-actions">
+                        <button class="btn btn-secondary">Ver detalle</button>
+                        <button class="btn btn-primary btn-add" data-sku="GPU-RTX4080">Agregar al carrito</button>
+                    </div>
+                </div>
+                <div class="card" data-name="Procesador Ryzen 9">
+                    <img  alt="Procesador CPU" src="https://images.unsplash.com/photo-1598383849996-68c544d590ce" />
+                    <h3>Procesador Ryzen 9</h3>
+                    <p class="price">$550.00</p>
+                    <ul>
+                        <li>12 Núcleos / 24 Hilos</li>
+                        <li>Hasta 5.6GHz</li>
+                        <li>Socket AM5</li>
+                    </ul>
+                    <div class="card-actions">
+                        <button class="btn btn-secondary">Ver detalle</button>
+                        <button class="btn btn-primary btn-add" data-sku="CPU-R9-7900X">Agregar al carrito</button>
+                    </div>
+                </div>
+                <div class="card" data-name="SSD NVMe 2TB">
+                    <img  alt="Unidad SSD NVMe" src="https://images.unsplash.com/photo-1680268309875-09326e1d6bd0" />
+                    <h3>SSD NVMe 2TB</h3>
+                    <p class="price">$150.00</p>
+                    <ul>
+                        <li>Lectura 7000MB/s</li>
+                        <li>Escritura 6500MB/s</li>
+                        <li>PCIe 4.0</li>
+                    </ul>
+                    <div class="card-actions">
+                        <button class="btn btn-secondary">Ver detalle</button>
+                        <button class="btn btn-primary btn-add" data-sku="SSD-NVME-2TB-G4">Agregar al carrito</button>
+                    </div>
+                </div>
+                <div class="card" data-name="Memoria RAM 32GB DDR5">
+                    <img  alt="Módulos de memoria RAM" src="https://images.unsplash.com/photo-1699796990049-3406a9991baa" />
+                    <h3>Memoria RAM 32GB DDR5</h3>
+                    <p class="price">$130.00</p>
+                    <ul>
+                        <li>Kit 2x16GB</li>
+                        <li>6000MHz CL30</li>
+                        <li>RGB personalizable</li>
+                    </ul>
+                    <div class="card-actions">
+                        <button class="btn btn-secondary">Ver detalle</button>
+                        <button class="btn btn-primary btn-add" data-sku="RAM-DDR5-32GB-6000">Agregar al carrito</button>
+                    </div>
+                </div>
+                <div class="card" data-name="Motherboard X670E">
+                    <img  alt="Placa base de computadora" src="https://images.unsplash.com/photo-1679148785151-80c72952bef3" />
+                    <h3>Motherboard X670E</h3>
+                    <p class="price">$400.00</p>
+                    <ul>
+                        <li>Socket AM5</li>
+                        <li>Wi-Fi 6E</li>
+                        <li>PCIe 5.0</li>
+                    </ul>
+                    <div class="card-actions">
+                        <button class="btn btn-secondary">Ver detalle</button>
+                        <button class="btn btn-primary btn-add" data-sku="MOBO-X670E-GAMING">Agregar al carrito</button>
+                    </div>
+                </div>
+                <div class="card" data-name="Fuente de Poder 850W Gold">
+                    <img  alt="Fuente de poder para PC" src="https://images.unsplash.com/photo-1698418867966-54b6c3244890" />
+                    <h3>Fuente de Poder 850W Gold</h3>
+                    <p class="price">$160.00</p>
+                    <ul>
+                        <li>850W 80+ Gold</li>
+                        <li>Totalmente modular</li>
+                        <li>Ventilador silencioso</li>
+                    </ul>
+                    <div class="card-actions">
+                        <button class="btn btn-secondary">Ver detalle</button>
+                        <button class="btn btn-primary btn-add" data-sku="PSU-850W-GOLD">Agregar al carrito</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="outlet" class="container">
+            <h2>OUTLET</h2>
+            <div id="gridOutlet" class="product-grid">
+                <div class="card" data-name="Monitor 27 pulgadas 144Hz">
+                    <div class="discount-badge">-20%</div>
+                    <img  alt="Monitor para gaming" src="https://images.unsplash.com/photo-1647779090276-29a93d4f9937" />
+                    <h3>Monitor 27" 144Hz</h3>
+                    <p class="price"><del>$300.00</del> $240.00</p>
+                    <ul>
+                        <li>Resolución 1440p</li>
+                        <li>1ms de respuesta</li>
+                        <li>Usado - Excelente estado</li>
+                    </ul>
+                    <div class="card-actions">
+                        <button class="btn btn-secondary">Ver detalle</button>
+                        <button class="btn btn-primary btn-add" data-sku="MON-27-1440-144-O">Agregar al carrito</button>
+                    </div>
+                </div>
+                <div class="card" data-name="Teclado Mecánico RGB">
+                    <div class="discount-badge">-30%</div>
+                    <img  alt="Teclado mecánico con luces RGB" src="https://images.unsplash.com/photo-1545671098-641cca260e0d" />
+                    <h3>Teclado Mecánico RGB</h3>
+                    <p class="price"><del>$100.00</del> $70.00</p>
+                    <ul>
+                        <li>Switches Blue</li>
+                        <li>Layout en español</li>
+                        <li>Caja abierta</li>
+                    </ul>
+                    <div class="card-actions">
+                        <button class="btn btn-secondary">Ver detalle</button>
+                        <button class="btn btn-primary btn-add" data-sku="KEY-MECH-RGB-O">Agregar al carrito</button>
+                    </div>
+                </div>
+                <div class="card" data-name="Mouse Gamer Inalámbrico">
+                    <div class="discount-badge">-15%</div>
+                    <img  alt="Mouse para gaming inalámbrico" src="https://images.unsplash.com/photo-1516445734452-d27adf79f92f" />
+                    <h3>Mouse Gamer Inalámbrico</h3>
+                    <p class="price"><del>$80.00</del> $68.00</p>
+                    <ul>
+                        <li>Sensor 16000 DPI</li>
+                        <li>Batería de 50hs</li>
+                        <li>Reacondicionado</li>
+                    </ul>
+                    <div class="card-actions">
+                        <button class="btn btn-secondary">Ver detalle</button>
+                        <button class="btn btn-primary btn-add" data-sku="MOU-GAMER-WL-O">Agregar al carrito</button>
+                    </div>
+                </div>
+                <div class="card" data-name="Tarjeta Gráfica RTX 3070">
+                    <div class="discount-badge">-25%</div>
+                    <img  alt="Tarjeta gráfica RTX 3070" src="https://images.unsplash.com/photo-1674741659137-b82a0b687ded" />
+                    <h3>Tarjeta Gráfica RTX 3070</h3>
+                    <p class="price"><del>$600.00</del> $450.00</p>
+                    <ul>
+                        <li>8GB GDDR6</li>
+                        <li>Usado - 6 meses de garantía</li>
+                        <li>Rendimiento sólido</li>
+                    </ul>
+                    <div class="card-actions">
+                        <button class="btn btn-secondary">Ver detalle</button>
+                        <button class="btn btn-primary btn-add" data-sku="GPU-RTX3070-O">Agregar al carrito</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="reacondiciona" class="container">
+            <h2>Reacondicioná tu PC</h2>
+            <div class="reacondiciona-content">
+                <div class="reacondiciona-text">
+                    <p>¿Tu PC no rinde como antes? En bootLab le damos una nueva vida. Optimizamos, actualizamos y reparamos tu equipo para que vuelva a volar. Nuestro proceso es simple, transparente y efectivo.</p>
+                    <ol class="steps">
+                        <li><span>1</span><strong>Diagnóstico:</strong> Traés tu equipo y lo analizamos sin costo.</li>
+                        <li><span>2</span><strong>Propuesta:</strong> Te presentamos un plan de mejoras y un presupuesto detallado.</li>
+                        <li><span>3</span><strong>Ejecución:</strong> Si aceptás, nuestros técnicos se ponen manos a la obra.</li>
+                        <li><span>4</span><strong>Entrega:</strong> Retirás tu PC potenciada y con garantía sobre nuestro trabajo.</li>
+                    </ol>
+                    <button id="btnAsesoramiento" class="btn btn-primary">Solicitar asesoramiento</button>
+                </div>
+                <div class="reacondiciona-image">
+                    <img  alt="Interior de una PC bien organizada" src="https://images.unsplash.com/photo-1583414381532-2a1370ab2603" />
+                </div>
+            </div>
+        </section>
+
+        <section id="acerca" class="container">
+            <h2>Acerca de nosotros</h2>
+            <p>bootLab nació en Ushuaia, Tierra del Fuego, de la mano de un grupo de entusiastas del hardware con una misión: ofrecer componentes de calidad y un servicio técnico honesto y accesible en el fin del mundo. Creemos que todos merecen una PC que funcione a su máximo potencial, ya sea para trabajar, estudiar o jugar.</p>
+        </section>
+
+        <section id="beneficios" class="container-fluid bg-white">
+            <div class="beneficios-grid">
+                <div class="beneficio-item">
+                    <div class="beneficio-icon">💳</div>
+                    <h3>Hasta 12 cuotas</h3>
+                    <p>Abonando con tarjetas de crédito</p>
+                </div>
+                <div class="beneficio-item">
+                    <div class="beneficio-icon">🚚</div>
+                    <h3>Envíos a todo el país</h3>
+                    <p>A través de Andreani</p>
+                </div>
+                <div class="beneficio-item">
+                    <div class="beneficio-icon">🛡️</div>
+                    <h3>Garantía Oficial</h3>
+                    <p>Hasta 12 meses en nuestros equipos</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="contacto" class="container">
+            <h2>Contacto</h2>
+            <div class="contact-grid">
+                <div class="contact-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                    <h3>Ventas</h3>
+                    <a href="tel:+543544610641">3544 61-0641</a>
+                </div>
+                <div class="contact-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.54 13.9c-.23-2.1-1.2-4-2.83-5.5L11.4 1.6c-.22-.22-.53-.34-.85-.34H3.5c-.55 0-1 .45-1 1v7.05c0 .32.13.64.35.86l6.81 6.81c1.5 1.5 3.41 2.34 5.41 2.34 2.11 0 4.13-.92 5.58-2.58l2.27-2.79c.23-.28.35-.63.35-1a2.4 2.4 0 0 0-.98-1.86zM15 9a2 2 0 1 1-4 0 2 2 0 0 1 4 0z"/></svg>
+                    <h3>WhatsApp</h3>
+                    <a href="https://wa.me/5492901400366" target="_blank" rel="noopener noreferrer">2901 400366</a>
+                </div>
+                <div class="contact-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
+                    <h3>Email</h3>
+                    <a href="mailto:info@bootlabpc.com">info@bootlabpc.com</a>
+                </div>
+                <div class="contact-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    <h3>Ubicación</h3>
+                    <p>Av. San Martín 700-736, Mina Clavero, Córdoba</p>
+                </div>
+            </div>
+            <div class="map-placeholder">
+                <!-- En Django, aquí podrías tener un campo para el iframe del mapa -->
+                <iframe
+                    src="https://www.openstreetmap.org/export/embed.html?bbox=-65.0069,-31.7225,-64.9969,-31.7175&layer=mapnik"
+                    style="border:0;"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"
+                    title="Mapa de ubicación de bootLab">
+                </iframe>
+            </div>
+        </section>
+    </main>
+    {% endblock content %}
+
+    {% block footer %} 
+    <footer id="footer">
+        <div class="container footer-content">
+            <div class="footer-main">
+                <nav class="footer-nav">
+                    <a href="#acerca">Acerca de nosotros</a>
+                    <a href="#productos">Productos</a>
+                    <a href="#reacondiciona">Reacondicioná tu PC</a>
+                    <a href="#outlet">OUTLET</a>
+                    <a href="#contacto">Contacto</a>
+                </nav>
+                <div class="fiscal-data-placeholder">
+                    {% block fiscal_data %}
+                    <p>Espacio reservado para datos fiscales.</p>
+                    {% endblock fiscal_data %}
+                </div>
+            </div>
+            <p class="copyright">&copy; bootLab 2025. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+    {% endblock footer %}
+
+    <!-- Modales -->
+    <div id="modalOverlay" class="modal-overlay hidden"></div>
+    
+    <div id="loginModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="loginModalTitle">
+        <h3 id="loginModalTitle">Ingresar</h3>
+        <p>Aquí irá el formulario de login del backend.</p>
+        <button class="btn-close-modal" aria-label="Cerrar">&times;</button>
+    </div>
+
+    <div id="cartModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="cartModalTitle">
+        <h3 id="cartModalTitle">Carrito de Compras</h3>
+        <p>Aquí irá el contenido del carrito del backend.</p>
+        <button class="btn-close-modal" aria-label="Cerrar">&times;</button>
+    </div>
+
+    <div id="asesoramientoModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="asesoramientoModalTitle">
+        <h3 id="asesoramientoModalTitle">Solicitar Asesoramiento</h3>
+        <p>¡Gracias por tu interés! Por favor, contactanos por WhatsApp o Email para coordinar el diagnóstico de tu equipo. Nuestros datos están en la sección de Contacto.</p>
+        <button class="btn-close-modal" aria-label="Cerrar">&times;</button>
+    </div>
+
+</body>
+</html>

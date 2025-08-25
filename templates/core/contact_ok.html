@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="p-8">
+  <h3 class="text-2xl font-bold">¡Gracias, {{ name }}! Recibimos tu mensaje.</h3>
+  <a href="{% url 'home' %}" class="text-blue-600 underline">Volver</a>
+</div>
+{% endblock %}
