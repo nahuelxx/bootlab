@@ -1,0 +1,44 @@
+[
+  { "model": "tienda.product", "pk": 1, "fields": {
+    "name": "RTX 4060 Ti 8GB", "category": "gpu-nueva", "brand": "NVIDIA", "series": "RTX 40",
+    "price": 450000, "condition": "nuevo",
+    "specs": ["8GB", "GDDR6", "HDMI 2.1"], "image_url": "", "is_active": true
+  }},
+  { "model": "tienda.product", "pk": 2, "fields": {
+    "name": "RTX 4070 12GB", "category": "gpu-nueva", "brand": "NVIDIA", "series": "RTX 40",
+    "price": 650000, "condition": "nuevo",
+    "specs": ["12GB", "GDDR6X", "DLSS 3"], "image_url": "", "is_active": true
+  }},
+  { "model": "tienda.product", "pk": 3, "fields": {
+    "name": "RX 7600 XT 16GB", "category": "gpu-nueva", "brand": "AMD", "series": "RX 7000",
+    "price": 420000, "condition": "nuevo",
+    "specs": ["16GB", "GDDR6", "AV1"], "image_url": "", "is_active": true
+  }},
+
+  { "model": "tienda.product", "pk": 4, "fields": {
+    "name": "RTX 3070 8GB (Usada)", "category": "gpu-usada", "brand": "NVIDIA", "series": "RTX 30",
+    "price": 320000, "condition": "muy bueno",
+    "specs": ["8GB", "GDDR6", "2xDP + 1xHDMI"], "image_url": "", "is_active": true
+  }},
+  { "model": "tienda.product", "pk": 5, "fields": {
+    "name": "RX 6700 XT 12GB (Usada)", "category": "gpu-usada", "brand": "AMD", "series": "RX 6000",
+    "price": 280000, "condition": "muy bueno",
+    "specs": ["12GB", "GDDR6", "RDNA2"], "image_url": "", "is_active": true
+  }},
+  { "model": "tienda.product", "pk": 6, "fields": {
+    "name": "RTX 3060 Ti 8GB (Usada)", "category": "gpu-usada", "brand": "NVIDIA", "series": "RTX 30",
+    "price": 240000, "condition": "bueno",
+    "specs": ["8GB", "GDDR6", "DLSS 2"], "image_url": "", "is_active": true
+  }},
+
+  { "model": "tienda.product", "pk": 7, "fields": {
+    "name": "PC Workstation i5 + RTX 3060", "category": "pc-reacondicionada", "brand": "bootLab", "series": "2023",
+    "price": 980000, "condition": "reacondicionada",
+    "specs": ["i5 12th", "16GB RAM", "1TB NVMe", "RTX 3060"], "image_url": "", "is_active": true
+  }},
+  { "model": "tienda.product", "pk": 8, "fields": {
+    "name": "PC Creator Ryzen 7 + RX 6700 XT", "category": "pc-reacondicionada", "brand": "bootLab", "series": "2023",
+    "price": 1150000, "condition": "reacondicionada",
+    "specs": ["Ryzen 7", "32GB RAM", "1TB NVMe", "RX 6700 XT"], "image_url": "", "is_active": true
+  }}
+]
