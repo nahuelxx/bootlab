@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { ExternalLink, ArrowLeft, Check, Package, CreditCard, ShoppingBag } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
+import { getCreditAmount, getCreditoId, getVigenciaHoras } from '@/utils/normalizers';
 
 function StepConfirmation({ wizardData, onUpdate, onPrev }) {
   const { toast } = useToast();
@@ -50,9 +51,9 @@ function StepConfirmation({ wizardData, onUpdate, onPrev }) {
   };
 
   const checkoutData = wizardData.selectedProduct?.checkoutData;
-  const creditAmount = wizardData.prevaluation?.pre_valuacion || 0;
-  const productPrice = wizardData.selectedProduct?.price || 0;
-  const balance = checkoutData?.saldo || 0;
+  const creditAmount = getCreditAmount(wizardData.prevaluation);
+  const productPrice = wizardData.selectedProduct?.price ?? 0;
+  const balance = checkoutData?.saldo ?? Math.max(0, productPrice - creditAmount);
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
@@ -124,7 +125,7 @@ function StepConfirmation({ wizardData, onUpdate, onPrev }) {
               {formatPrice(creditAmount)}
             </p>
             <p className="text-sm text-gray-600">
-              Válido por {wizardData.prevaluation?.vigencia_horas || 48} horas
+              Válido por {getVigenciaHoras(wizardData.prevaluation)} horas
             </p>
           </div>
         </motion.div>

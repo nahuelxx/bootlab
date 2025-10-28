@@ -1,6 +1,5 @@
 
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Label } from '@/components/ui/label';
@@ -48,24 +47,26 @@ function StepComponent({ data, onUpdate, onNext, canContinue }) {
     onUpdate(newData);
   };
 
-  const handleCalculateCredit = async () => {
-    if (!canContinue) {
-      toast({
-        title: "Información incompleta",
-        description: "Por favor completa todos los campos requeridos y sube al menos 3 fotos.",
-        variant: "destructive"
-      });
-      return;
-    }
+  const ALLOW_BYPASS = import.meta.env.VITE_ALLOW_BYPASS_RAY === 'true';
 
-    if (formData.type === 'gpu' && !formData.rayTracing) {
-      toast({
-        title: "GPU no elegible",
-        description: "Solo aceptamos GPUs con Ray Tracing (RTX 2060+ / AMD RDNA2+)",
-        variant: "destructive"
-      });
-      return;
-    }
+  const handleCalculateCredit = async () => {
+  if (!canContinue) {
+    toast({
+      title: "Información incompleta",
+      description: "Por favor completa todos los campos requeridos y sube al menos 3 fotos.",
+      variant: "destructive"
+    });
+    return;
+  }
+
+  if (formData.type === 'gpu' && !formData.rayTracing && !ALLOW_BYPASS) {
+    toast({
+      title: "GPU no elegible",
+      description: "Solo aceptamos GPUs con Ray Tracing (RTX 2060+ / AMD RDNA2+)",
+      variant: "destructive"
+    });
+    return;
+  }
 
     setIsLoading(true);
 
@@ -78,7 +79,7 @@ function StepComponent({ data, onUpdate, onNext, canContinue }) {
         ray_tracing: !!formData.rayTracing,
         year: formData.year ? parseInt(formData.year) : undefined,
         accessories: formData.accessories || [],
-        photos: formData.photos || [],
+        photos: (formData.photos || []).map(p => p?.dataUrl ?? p),
       };
 
       const prevaluationData = await api.prevaluar(payload);
@@ -178,6 +179,24 @@ function StepComponent({ data, onUpdate, onNext, canContinue }) {
           {isLoading ? 'Calculando...' : 'Calcular crédito'}
         </Button>
       </div>
+
+      {import.meta.env.DEV && (
+  <Button
+    variant="outline"
+    onClick={() => {
+      // envía aunque no tenga ray tracing
+      const prev = formData.rayTracing;
+      handleFormChange('rayTracing', false);
+      handleCalculateCredit();
+      handleFormChange('rayTracing', prev);
+    }}
+    className="ml-3"
+  >
+    Forzar envío (DEV)
+  </Button>
+)}
+
+      
     </div>
   );
 }

@@ -205,3 +205,21 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# --- Frontend (Vite/React) ---
+canje/frontend/node_modules/
+canje/frontend/dist/
+canje/frontend/.vite/
+canje/frontend/.env
+canje/frontend/.env.*.local
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# --- Archivos del sistema ---
+.DS_Store
+Thumbs.db
+
+# --- Django estáticos y media (generados en runtime) ---
+staticfiles/
+media/

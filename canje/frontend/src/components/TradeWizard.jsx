@@ -68,17 +68,25 @@ function TradeWizard() {
     }
   };
 
+  const ALLOW_BYPASS = import.meta.env.VITE_ALLOW_BYPASS_RAY === 'true';
+
   const canContinue = () => {
     switch (currentStep) {
       case 1:
-        return wizardData.component && 
-               wizardData.component.photos && 
-               wizardData.component.photos.length >= 3 &&
-               (wizardData.component.type !== 'gpu' || wizardData.component.rayTracing);
+        return (
+          wizardData.component &&
+          Array.isArray(wizardData.component.photos) &&
+          wizardData.component.photos.length >= 3 &&
+          (
+            wizardData.component.type !== 'gpu' ||
+            wizardData.component.rayTracing ||
+            ALLOW_BYPASS // <- sólo en DEV permite seguir sin RT
+          )
+        );
       case 2:
-        return wizardData.prevaluation;
+        return !!wizardData.prevaluation;
       case 3:
-        return wizardData.selectedProduct;
+        return !!wizardData.selectedProduct;
       default:
         return true;
     }

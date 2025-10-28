@@ -1,12 +1,11 @@
-
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/components/ui/use-toast';
 import ProductGrid from '@/components/ProductGrid';
 import FilterChips from '@/components/FilterChips';
 import { api } from '@/lib/api';
+import { getCreditAmount } from '@/utils/normalizers';
 
 function StepChooseProduct({ creditData, data, onUpdate, onNext, onPrev }) {
   const [selectedCategory, setSelectedCategory] = useState('gpu-nueva');
@@ -20,116 +19,82 @@ function StepChooseProduct({ creditData, data, onUpdate, onNext, onPrev }) {
   });
   const { toast } = useToast();
 
+  // 🚩 Al cambiar de categoría, reseteamos filtros y pedimos productos
   useEffect(() => {
+    setFilters({ brand: '', series: '', priceRange: '' }); // <--
     fetchProducts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCategory]);
 
+  // Reaplicar filtros cuando cambien productos o filtros
   useEffect(() => {
     applyFilters();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [products, filters]);
 
-  const fetchProducts = async () => {
-    setIsLoading(true);
-    
-    try {
-      // INTEGRATION POINT: Fetch products from API
-      /*
-      const response = await fetch(`/api/products?category=${selectedCategory}`);
-      const productsData = await response.json();
-      */
+const fetchProducts = async () => {
+  setIsLoading(true);
+  try {
+    const raw = await api.products({ category: selectedCategory });
+    const items = (raw || []).map((p, i) => ({
+      id: p.id ?? i,
+      name: p.name ?? p.title ?? 'Producto',
+      brand: p.brand ?? '',
+      series: p.series ?? '',
+      price: Number(p.price ?? 0),
+      specs: Array.isArray(p.specs) ? p.specs : [],
+      condition: p.condition ?? '',
+      image: p.image_url || p.image || null,
+    }));
+    setProducts(items);
+    setFilteredProducts(items);
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    toast({
+      title: "Error",
+      description: "No se pudieron cargar los productos. Intenta nuevamente.",
+      variant: "destructive"
+    });
+    setProducts([]);
+    setFilteredProducts([]);
+  } finally {
+    setIsLoading(false);
+  }
+};
 
-      // Mock products for demo
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      const mockProducts = generateMockProducts(selectedCategory);
-      setProducts(mockProducts);
-      
-    } catch (error) {
-      console.error('Error fetching products:', error);
-      toast({
-        title: "Error",
-        description: "No se pudieron cargar los productos. Intenta nuevamente.",
-        variant: "destructive"
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const applyFilters = (source = products) => {
+    const base = Array.isArray(source) ? source : [];
+    let result = base;
 
-  const generateMockProducts = (category) => {
-    const baseProducts = {
-      'gpu-nueva': [
-        { id: 1, name: 'RTX 4060 Ti', brand: 'NVIDIA', series: 'RTX 40', price: 450000, image: 'Modern NVIDIA RTX 4060 Ti graphics card', specs: ['8GB GDDR6', 'Ray Tracing', 'DLSS 3'] },
-        { id: 2, name: 'RTX 4070', brand: 'NVIDIA', series: 'RTX 40', price: 650000, image: 'NVIDIA RTX 4070 graphics card in packaging', specs: ['12GB GDDR6X', 'Ray Tracing', 'DLSS 3'] },
-        { id: 3, name: 'RX 7600 XT', brand: 'AMD', series: 'RX 7000', price: 420000, image: 'AMD Radeon RX 7600 XT graphics card', specs: ['16GB GDDR6', 'RDNA 3', 'FSR 3'] },
-        { id: 4, name: 'RTX 4080', brand: 'NVIDIA', series: 'RTX 40', price: 1200000, image: 'High-end NVIDIA RTX 4080 graphics card', specs: ['16GB GDDR6X', 'Ray Tracing', 'DLSS 3'] },
-      ],
-      'gpu-usada': [
-        { id: 5, name: 'RTX 3070 Ti', brand: 'NVIDIA', series: 'RTX 30', price: 380000, image: 'Used NVIDIA RTX 3070 Ti graphics card', specs: ['8GB GDDR6X', 'Ray Tracing', 'DLSS 2'], condition: 'Excelente' },
-        { id: 6, name: 'RTX 3080', brand: 'NVIDIA', series: 'RTX 30', price: 520000, image: 'Used NVIDIA RTX 3080 graphics card', specs: ['10GB GDDR6X', 'Ray Tracing', 'DLSS 2'], condition: 'Muy bueno' },
-        { id: 7, name: 'RX 6700 XT', brand: 'AMD', series: 'RX 6000', price: 350000, image: 'Used AMD RX 6700 XT graphics card', specs: ['12GB GDDR6', 'RDNA 2', 'FSR'], condition: 'Bueno' },
-      ],
-      'pc-reacondicionada': [
-        { id: 8, name: 'PC Gaming RTX 3060', brand: 'bootLab', series: 'Gaming', price: 850000, image: 'Refurbished gaming PC with RTX 3060', specs: ['i5-11400F', 'RTX 3060', '16GB RAM', '500GB SSD'] },
-        { id: 9, name: 'PC Workstation RTX 3070', brand: 'bootLab', series: 'Pro', price: 1200000, image: 'Professional workstation PC with RTX 3070', specs: ['i7-11700', 'RTX 3070', '32GB RAM', '1TB SSD'] },
-        { id: 10, name: 'PC Compact RTX 3050', brand: 'bootLab', series: 'Compact', price: 650000, image: 'Compact gaming PC with RTX 3050', specs: ['i5-10400F', 'RTX 3050', '16GB RAM', '256GB SSD'] },
-      ]
-    };
+    if (filters.brand)  result = result.filter(p => p.brand === filters.brand);
+    if (filters.series) result = result.filter(p => p.series === filters.series);
 
-    return baseProducts[category] || [];
-  };
-
-  const applyFilters = () => {
-    let filtered = [...products];
-
-    if (filters.brand) {
-      filtered = filtered.filter(product => product.brand === filters.brand);
+    // Soportar "min-max", "min-" y "min" (solo piso)
+    if (filters.priceRange) { // <--
+      const [minStr, maxStr] = String(filters.priceRange).split('-'); // <-- soporta "1000000-" o "1000000"
+      const min = Number(minStr || 0);
+      const max = maxStr === undefined || maxStr === '' ? null : Number(maxStr);
+      result = result.filter(p => (max == null ? p.price >= min : (p.price >= min && p.price <= max)));
     }
 
-    if (filters.series) {
-      filtered = filtered.filter(product => product.series === filters.series);
-    }
-
-    if (filters.priceRange) {
-      const [min, max] = filters.priceRange.split('-').map(Number);
-      filtered = filtered.filter(product => {
-        if (max) {
-          return product.price >= min && product.price <= max;
-        } else {
-          return product.price >= min;
-        }
-      });
-    }
-
-    setFilteredProducts(filtered);
+    setFilteredProducts(result);
   };
 
 const handleProductSelect = async (product) => {
   try {
-    // llamada real:
     const checkoutData = await api.checkoutLink({
       product_id: product.id,
-      credito_id: creditData?.credito_id, // viene de la prevaluación
+      credito_id: creditData?.credito_id,
+      product_price: Number(product.price),
+      product_name: product.name,
     });
 
-    onUpdate({
-      ...product,
-      checkoutData, // { checkout_url, saldo, total, credito_aplicado }
-    });
-
-    toast({
-      title: "¡Producto seleccionado!",
-      description: `${product.name} agregado con tu crédito aplicado.`,
-    });
-
+    onUpdate({ ...product, checkoutData });
+    toast({ title: "¡Producto seleccionado!", description: `${product.name} agregado con tu crédito.` });
     onNext();
-  } catch (error) {
-    console.error('Error selecting product:', error);
-    toast({
-      title: "Error",
-      description: error.message || "No se pudo procesar la selección. Intenta nuevamente.",
-      variant: "destructive"
-    });
+  } catch (err) {
+    console.error(err);
+    toast({ title: "Error", description: err.message || "No se pudo procesar la selección.", variant: "destructive" });
   }
 };
 
@@ -141,9 +106,8 @@ const handleProductSelect = async (product) => {
     }).format(price);
   };
 
-  const calculateBalance = (productPrice) => {
-    return Math.max(0, productPrice - (creditData?.pre_valuacion || 0));
-  };
+  const calculateBalance = (productPrice) =>
+    Math.max(0, Number(productPrice) - Number(creditData?.pre_valuacion || 0));
 
   const categories = [
     { id: 'gpu-nueva', label: 'GPU Nueva', icon: '🆕' },
@@ -156,7 +120,7 @@ const handleProductSelect = async (product) => {
       <div>
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Elegí qué comprar</h1>
         <p className="text-gray-600">
-          Usa tu crédito de {formatPrice(creditData?.pre_valuacion || 0)} para comprar productos en bootLab.
+          Usa tu crédito de {formatPrice(getCreditAmount(creditData))} para comprar productos en bootLab.
         </p>
       </div>
 

@@ -1,21 +1,18 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { X } from 'lucide-react';
 
 function FilterChips({ products, filters, onFiltersChange, category }) {
-  const getUniqueValues = (key) => {
-    return [...new Set(products.map(product => product[key]))].filter(Boolean);
-  };
+  const safe = Array.isArray(products) ? products : [];
+  const brands = [...new Set(safe.map(p => p.brand).filter(Boolean))];
+  const series = [...new Set(safe.map(p => p.series).filter(Boolean))];
 
-  const brands = getUniqueValues('brand');
-  const series = getUniqueValues('series');
-  
+  // ⚠️ “Más de $1M” ahora usa "1000000-" para compatibilidad con applyFilters
   const priceRanges = [
     { label: 'Hasta $300k', value: '0-300000' },
     { label: '$300k - $600k', value: '300000-600000' },
     { label: '$600k - $1M', value: '600000-1000000' },
-    { label: 'Más de $1M', value: '1000000' }
+    { label: 'Más de $1M', value: '1000000-' }, // <--
   ];
 
   const updateFilter = (key, value) => {
