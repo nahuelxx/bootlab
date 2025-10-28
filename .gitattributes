@@ -1,0 +1,10 @@
+# Fuerza LF por defecto (compatible Linux/macOS/CI)
+* text=auto eol=lf
+
+# Scripts de Windows que sí necesitan CRLF
+*.bat eol=crlf
+*.cmd eol=crlf
+*.ps1 eol=crlf
+
+# Shell / Unix
+*.sh eol=lf
